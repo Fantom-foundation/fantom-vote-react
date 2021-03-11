@@ -1,0 +1,178 @@
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.header {
+    flex: 0 0 60px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    background: #007bff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 20px;
+}
+.selector {
+    flex: 0 0 15%;
+    margin-top: 20vh;
+    margin-left: 10px;
+}
+
+.selectorLegend {
+    font-size: x-large !important;
+    font-family: -webkit-body !important;
+    color: black !important;
+    margin-bottom: 20px !important;
+
+}
+
+.board {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+}
+.proposalBoard {
+    flex-grow: 1;
+    padding: 30px;
+    display: grid;
+    grid-template-columns: 6fr 4fr;
+    grid-gap: 20px;
+    border-left: 2px dotted #007bff;
+    /* margin-top: 36px; */
+
+}
+.subboard1 {
+    /* display: grid;
+    grid-template-rows: 7fr 3fr;
+    grid-gap: 20px; */
+}
+.proposal {
+  background-color: white;
+  /* height: calc(100% - 30px); */
+  border-radius: 24px;
+  position: relative;
+  border-color: #007bff;
+  border: 1px dotted #007bff;
+  margin-bottom: 20px;
+}
+
+.quote {
+    background-color: #007bff;
+    height: calc(100% - 30px);
+    border-radius: 24px;
+    position: relative;
+}
+.quote::after {
+    content: '';
+    position: absolute;
+    right: -7px;
+    bottom: -62px;
+    width: 80px;
+    height: 80px;
+    background-image: url(../../assets/arrow.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    transform: rotateY(180deg);
+}
+.subboard2 {
+    display: grid;
+    grid-template-rows: 0fr 10fr;
+    color : white;
+    /* grid-gap: 20px; */
+}
+.footer {
+    flex: 0 0 50px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    background: #007bff;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-size: larger;
+    color: white;
+    font-family: none;
+}
+.footerLogo {
+    height: 50%;
+}
+
+.MuiRadio-colorSecondary.Mui-checked {
+  color: #007bff !important;
+}
+
+.walletConnect {
+    padding: 6px;
+    box-shadow: 0 0 5px rgba(3, 6, 56, 0.377);
+    color : white;
+    cursor: pointer;
+    font-size: x-large;
+    font-family: none;
+    border-radius: 12px;
+}
+
+.walletConnectStatus {
+  padding: 6px;
+  /* box-shadow: 0 0 5px rgba(3, 6, 56, 0.377); */
+  color: white;
+  cursor: pointer;
+  font-size: large;
+  font-family: none;
+  border-radius: 12px;
+  margin-right: 20px;
+}
+
+
+.submitButton {
+    margin-top: 0px !important;
+    margin-bottom: 12px !important;
+    width: 120px !important;
+    height: 32px;
+}
+.proposalGridLow {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.proposalInput {
+    margin-right: 12px !important;
+    margin-left: 12px !important;
+}
+.proposalHeading {
+    font-family: emoji;
+    font-size: x-large;
+    margin-top: 36px;
+}
+.MuiButton-label {
+    font-size: large !important;
+}
+.MuiSvgIcon-root {
+    font-size: large !important;
+}
+
+.tipTable {
+    maxwidth: 700;
+
+}
+
+.proposalTemplateHeading {
+  font-family: emoji;
+  font-size: x-large;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.proposalConstraintHeading {
+  font-family: emoji;
+  font-size: x-large;
+  margin-top: 36px;
+  margin-bottom: 12px;
+  color : white;
+}
