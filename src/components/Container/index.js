@@ -48,6 +48,9 @@ const Container = () => {
   const [startTime, setStartTime] = useState();
   const [minEndTime, setMinEndTime] = useState();
   const [maxEndTime, setMaxEndTime] = useState();
+
+  const [isTemplateShown, setIsTemplateShown] = useState(false);
+  const [isConstraintsShown, setIsConstraintsShown] = useState(false);
   const now = new Date();
   const today = dateFormat(now, 'yyyy-mm-dd') + 'T' + dateFormat(now, 'HH:MM');
 
@@ -222,6 +225,7 @@ const Container = () => {
     }
   };
   const formatAddress = addr => {
+    return addr;
     if (addr && addr != '') return addr.substring(0, 4) + '....' + addr.substring(addr.length - 4);
     return addr || '';
   };
@@ -350,7 +354,22 @@ const Container = () => {
       <div className="header">
         <img src={FantomLogo}></img>
         <div>
-          <span className="walletConnectStatus">{chainId == 4002 && 'Connected to Opera Mainnet'}</span>
+          <span
+            className="toggleMenu"
+            onClick={() => {
+              setIsTemplateShown(!isTemplateShown);
+            }}
+          >
+            {isTemplateShown ? 'Hide' : 'Show'} Templates
+          </span>
+          <span
+            className="toggleMenu"
+            onClick={() => {
+              setIsConstraintsShown(!isConstraintsShown);
+            }}
+          >
+            {isConstraintsShown ? 'Hide' : 'Show'} Constraints
+          </span>
           <span className="walletConnect" onClick={handleWalletConnect}>
             {!isConnected ? 'Connect Wallet' : 'Disconnect'}
           </span>
@@ -402,19 +421,32 @@ const Container = () => {
                 />
                 <TextField
                   id="standard-basic"
-                  label="Start Time"
-                  type="datetime-local"
-                  defaultValue={today}
-                  className="proposalInput"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
+                  label="OptionScales"
                   onChange={e => {
-                    setStartTime(new Date(e.target.value));
+                    let value = e.target.value;
+                    let values = value.split(',');
+                    let _options = [];
+                    values.map(val => {
+                      _options.push(ethers.utils.formatBytes32String(val));
+                    });
+                    setOptions(_options);
                   }}
+                  placeholder="Each options are separated by comma. eg: 1,2,3"
+                  className="proposalInput"
                 />
               </div>
               <div className="proposalGridLow">
+                <TextField
+                  id="standard-basic"
+                  label="Address"
+                  value={formatAddress(account)}
+                  className="proposalInput"
+                  inputProps={
+                    {
+                      // readOnly: true,
+                    }
+                  }
+                />
                 <TextField
                   id="standard-basic"
                   label="Min Agreement"
@@ -424,6 +456,13 @@ const Container = () => {
                     setMinAgreement(e.target.value);
                   }}
                   className="proposalInput"
+                  placeholder="This should be greater than 55."
+                  InputProps={{
+                    inputProps: {
+                      max: 100,
+                      min: 55,
+                    },
+                  }}
                 />
                 <TextField
                   id="standard-basic"
@@ -434,6 +473,28 @@ const Container = () => {
                     setMinVotes(e.target.value);
                   }}
                   className="proposalInput"
+                  placeholder="This should be greater than 55."
+                  InputProps={{
+                    inputProps: {
+                      max: 100,
+                      min: 55,
+                    },
+                  }}
+                />
+              </div>
+              <div className="proposalGridLow">
+                <TextField
+                  id="standard-basic"
+                  label="Start Time"
+                  type="datetime-local"
+                  defaultValue={today}
+                  className="proposalInput"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  onChange={e => {
+                    setStartTime(new Date(e.target.value));
+                  }}
                 />
                 <TextField
                   id="standard-basic"
@@ -447,33 +508,6 @@ const Container = () => {
                   onChange={e => {
                     setMinEndTime(new Date(e.target.value));
                   }}
-                />
-              </div>
-              <div className="proposalGridLow">
-                <TextField
-                  id="standard-basic"
-                  label="Options"
-                  onChange={e => {
-                    let value = e.target.value;
-                    let values = value.split(',');
-                    let _options = [];
-                    values.map(val => {
-                      _options.push(ethers.utils.formatBytes32String(val));
-                    });
-                    setOptions(_options);
-                  }}
-                  className="proposalInput"
-                />
-                <TextField
-                  id="standard-basic"
-                  label="Address"
-                  value={formatAddress(account)}
-                  className="proposalInput"
-                  inputProps={
-                    {
-                      // readOnly: true,
-                    }
-                  }
                 />
                 <TextField
                   id="standard-basic"
@@ -489,7 +523,7 @@ const Container = () => {
                   }}
                 />
               </div>
-              <div>
+              <div className={isTemplateShown ? 'smallButton' : 'bigButton'}>
                 <Button
                   variant="contained"
                   color="primary"
@@ -501,63 +535,65 @@ const Container = () => {
                 </Button>
               </div>
             </div>
-            <div>
-              <div className="proposalTemplateHeading">Fantom Proposal Templates</div>
+            {isTemplateShown && (
               <div>
-                <TableContainer component={Paper}>
-                  <Table className="tipTable" aria-label="customized table">
-                    <TableHead>
-                      <TableRow>
-                        <StyledTableCell>Name</StyledTableCell>
-                        <StyledTableCell align="right">Proposal</StyledTableCell>
-                        <StyledTableCell align="right">Execution</StyledTableCell>
-                        <StyledTableCell align="right">MinStartTime</StyledTableCell>
-                        <StyledTableCell align="right">MaxStartTime</StyledTableCell>
-                        <StyledTableCell align="right">MinVotingDuration</StyledTableCell>
-                        <StyledTableCell align="right">MaxVotingDuration</StyledTableCell>
-                        <StyledTableCell align="right">MinTurnout</StyledTableCell>
-                        <StyledTableCell align="right">MinAgreement</StyledTableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {rows.map(row => (
-                        <StyledTableRow key={row.name}>
-                          <StyledTableCell>{row.name}</StyledTableCell>
-                          <StyledTableCell align="right">{row.proposal}</StyledTableCell>
-                          <StyledTableCell align="right">{row.execution}</StyledTableCell>
-                          <StyledTableCell align="right">{row.minSD}</StyledTableCell>
-                          <StyledTableCell align="right">{row.maxSD}</StyledTableCell>
-                          <StyledTableCell align="right">{row.minVD}</StyledTableCell>
-                          <StyledTableCell align="right">{row.maxVD}</StyledTableCell>
-                          <StyledTableCell align="right">{row.minTurnout}</StyledTableCell>
-                          <StyledTableCell align="right">{row.minAgreement}</StyledTableCell>
-                        </StyledTableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                <div className="proposalTemplateHeading">Fantom Proposal Templates</div>
+                <div>
+                  <TableContainer component={Paper}>
+                    <Table className="tipTable" aria-label="customized table">
+                      <TableHead>
+                        <TableRow>
+                          <StyledTableCell>Name</StyledTableCell>
+                          <StyledTableCell align="right">Proposal</StyledTableCell>
+                          <StyledTableCell align="right">Execution</StyledTableCell>
+                          <StyledTableCell align="right">MinStartTime</StyledTableCell>
+                          <StyledTableCell align="right">MaxStartTime</StyledTableCell>
+                          <StyledTableCell align="right">MinVotingDuration</StyledTableCell>
+                          <StyledTableCell align="right">MaxVotingDuration</StyledTableCell>
+                          <StyledTableCell align="right">MinTurnout</StyledTableCell>
+                          <StyledTableCell align="right">MinAgreement</StyledTableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {rows.map(row => (
+                          <StyledTableRow key={row.name}>
+                            <StyledTableCell>{row.name}</StyledTableCell>
+                            <StyledTableCell align="right">{row.proposal}</StyledTableCell>
+                            <StyledTableCell align="right">{row.execution}</StyledTableCell>
+                            <StyledTableCell align="right">{row.minSD}</StyledTableCell>
+                            <StyledTableCell align="right">{row.maxSD}</StyledTableCell>
+                            <StyledTableCell align="right">{row.minVD}</StyledTableCell>
+                            <StyledTableCell align="right">{row.maxVD}</StyledTableCell>
+                            <StyledTableCell align="right">{row.minTurnout}</StyledTableCell>
+                            <StyledTableCell align="right">{row.minAgreement}</StyledTableCell>
+                          </StyledTableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="subboard2">
-            <div></div>
-            <div className="quote">
-              <div className="proposalConstraintHeading">Proposal template constraints</div>
-              <div>
-                <List component="nav" aria-label="contacts">
-                  {constraints.map(constraint => (
-                    <ListItem button>
-                      <ListItemIcon>
-                        <StarIcon />
-                      </ListItemIcon>
-                      <ListItemText primary={constraint} />
-                    </ListItem>
-                  ))}
-                </List>
-              </div>
-            </div>
+            )}
           </div>
         </div>
+        {isConstraintsShown && (
+          <div className="quote-bg" onClick={() => setIsConstraintsShown(false)}>
+            <div className="quote">
+              <div className="proposalConstraintHeading">Proposal template constraints</div>
+
+              <List component="nav" aria-label="contacts" className="constraintsList">
+                {constraints.map(constraint => (
+                  <ListItem button>
+                    <ListItemIcon>
+                      <StarIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={constraint} />
+                  </ListItem>
+                ))}
+              </List>
+            </div>
+          </div>
+        )}
       </div>
       <div className="footer">
         <span>Powered By</span>
