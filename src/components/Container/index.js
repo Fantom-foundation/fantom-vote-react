@@ -67,11 +67,13 @@ const Container = () => {
     window.ethereum.on('chainChanged', _chainId => {
       //   handle chainId change
       dispatch(WalletConnectActions.changeChainId(_chainId));
+      setAccount('');
       console.log('chainid is changed to ', _chainId);
     });
     window.ethereum.on('disconnect', error => {
       //   handle disconnect
       dispatch(WalletConnectActions.disconnectWallet());
+      setAccount('');
       console.log('handler for disconnection', error);
     });
     window.ethereum.on('accountsChanged', accounts => {
@@ -98,6 +100,7 @@ const Container = () => {
 
   const handleWalletConnect = async () => {
     if (isConnected) {
+      setAccount('');
       dispatch(WalletConnectActions.disconnectWallet());
       // handle disconnect here
     } else {
