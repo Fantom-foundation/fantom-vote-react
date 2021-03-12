@@ -19,3 +19,8 @@ code {
 th {
   background-color:#007bff !important;
 }
+
+.MuiSwitch-track {
+  border: none !important;
+  background-color: #0d57a7 !important;
+}

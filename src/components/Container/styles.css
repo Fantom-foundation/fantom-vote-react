@@ -144,7 +144,6 @@
 
 .toggleMenu {
   padding: 6px;
-  /* box-shadow: 0 0 5px rgba(3, 6, 56, 0.377); */
   color: white;
   cursor: pointer;
   font-size: large;
@@ -225,4 +224,25 @@
 
   /* font-size: +40px !important;
   height: 50px !important; */
+}
+
+.headerRight {
+  display: flex;
+}
+
+.switch-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate3d(-50%, -50%, 0);
+  transform: translate3d(-50%, -50%, 0);
+}
+
+.toggleSpan {
+  color: white;
+  cursor: pointer;
+  font-size: large;
+  font-family: none;
+  border-radius: 12px;
+  margin-right: 20px;
 }

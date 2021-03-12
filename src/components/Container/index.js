@@ -26,6 +26,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import StarIcon from '@material-ui/icons/Star';
+import Switch from '@material-ui/core/Switch';
 import dateFormat from 'dateformat';
 
 import WalletConnectActions from '../../actions/walletconnect.actions';
@@ -34,6 +35,7 @@ import { ProposalTemplateSC, PlainTextProposalSC } from '../../constants/contrac
 import './styles.css';
 import FantomLogo from '../../assets/fantomlogo.svg';
 import { Description } from '@material-ui/icons';
+import { Input } from '@material-ui/core';
 
 const Container = () => {
   const dispatch = useDispatch();
@@ -351,27 +353,91 @@ const Container = () => {
     }
   };
 
+  const IOSSwitch = withStyles(theme => ({
+    root: {
+      width: 42,
+      height: 26,
+      padding: 0,
+      margin: theme.spacing(1),
+    },
+    switchBase: {
+      padding: 1,
+      '&$checked': {
+        transform: 'translateX(16px)',
+        color: theme.palette.common.white,
+        '& + $track': {
+          backgroundColor: '#52d869',
+          opacity: 1,
+          border: 'none',
+        },
+      },
+      '&$focusVisible $thumb': {
+        color: '#52d869',
+        border: '6px solid #fff',
+      },
+    },
+    thumb: {
+      width: 24,
+      height: 24,
+    },
+    track: {
+      borderRadius: 26 / 2,
+      border: `1px solid ${theme.palette.grey[400]}`,
+      backgroundColor: theme.palette.grey[50],
+      opacity: 1,
+      transition: theme.transitions.create(['background-color', 'border']),
+    },
+    checked: {},
+    focusVisible: {},
+  }))(({ classes, ...props }) => {
+    return (
+      <Switch
+        focusVisibleClassName={classes.focusVisible}
+        disableRipple
+        classes={{
+          root: classes.root,
+          switchBase: classes.switchBase,
+          thumb: classes.thumb,
+          track: classes.track,
+          checked: classes.checked,
+        }}
+        {...props}
+      />
+    );
+  });
   return (
     <div className="container">
       <NotificationContainer />
       <div className="header">
         <img src={FantomLogo}></img>
-        <div>
-          <span
-            className="toggleMenu"
-            onClick={() => {
-              setIsTemplateShown(!isTemplateShown);
-            }}
-          >
-            {isTemplateShown ? 'Hide' : 'Show'} Templates
+        <div className="headerRight">
+          <span className="toggleSpan">
+            <FormControlLabel
+              control={
+                <IOSSwitch
+                  checked={isTemplateShown}
+                  onChange={() => {
+                    setIsTemplateShown(!isTemplateShown);
+                  }}
+                  name="checkedB"
+                />
+              }
+              label="Template"
+            />
           </span>
-          <span
-            className="toggleMenu"
-            onClick={() => {
-              setIsConstraintsShown(!isConstraintsShown);
-            }}
-          >
-            {isConstraintsShown ? 'Hide' : 'Show'} Constraints
+          <span className="toggleSpan">
+            <FormControlLabel
+              control={
+                <IOSSwitch
+                  checked={isConstraintsShown}
+                  onChange={() => {
+                    setIsConstraintsShown(!isConstraintsShown);
+                  }}
+                  name="checkedB"
+                />
+              }
+              label="Constraint"
+            />
           </span>
           <span className="walletConnect" onClick={handleWalletConnect}>
             {!isConnected ? 'Connect Wallet' : 'Disconnect'}
