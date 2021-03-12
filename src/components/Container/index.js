@@ -412,33 +412,6 @@ const Container = () => {
                   }}
                   className="proposalInput"
                 />
-
-                <TextField
-                  id="standard-basic"
-                  label="Description"
-                  value={proposalDescription}
-                  onChange={e => {
-                    setProposalDescription(e.target.value);
-                  }}
-                  className="proposalInput"
-                />
-                <TextField
-                  id="standard-basic"
-                  label="OptionScales"
-                  onChange={e => {
-                    let value = e.target.value;
-                    let values = value.split(',');
-                    let _options = [];
-                    values.map(val => {
-                      _options.push(ethers.utils.formatBytes32String(val));
-                    });
-                    setOptions(_options);
-                  }}
-                  placeholder="Each options are separated by comma. eg: 1,2,3"
-                  className="proposalInput"
-                />
-              </div>
-              <div className="proposalGridLow">
                 <TextField
                   id="standard-basic"
                   label="Address"
@@ -449,6 +422,30 @@ const Container = () => {
                       // readOnly: true,
                     }
                   }
+                />
+                <TextField
+                  id="standard-basic"
+                  label="Start Time"
+                  type="datetime-local"
+                  defaultValue={today}
+                  className="proposalInput"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  onChange={e => {
+                    setStartTime(new Date(e.target.value));
+                  }}
+                />
+              </div>
+              <div className="proposalGridLow">
+                <TextField
+                  id="standard-basic"
+                  label="Description"
+                  value={proposalDescription}
+                  onChange={e => {
+                    setProposalDescription(e.target.value);
+                  }}
+                  className="proposalInput"
                 />
                 <TextField
                   id="standard-basic"
@@ -469,6 +466,36 @@ const Container = () => {
                 />
                 <TextField
                   id="standard-basic"
+                  label="Min End Time"
+                  type="datetime-local"
+                  defaultValue={today}
+                  className="proposalInput"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  onChange={e => {
+                    setMinEndTime(new Date(e.target.value));
+                  }}
+                />
+              </div>
+              <div className="proposalGridLow">
+                <TextField
+                  id="standard-basic"
+                  label="OptionScales"
+                  onChange={e => {
+                    let value = e.target.value;
+                    let values = value.split(',');
+                    let _options = [];
+                    values.map(val => {
+                      _options.push(ethers.utils.formatBytes32String(val));
+                    });
+                    setOptions(_options);
+                  }}
+                  placeholder="Each options are separated by comma. eg: 1,2,3"
+                  className="proposalInput"
+                />
+                <TextField
+                  id="standard-basic"
                   label="Min Votes"
                   type="number"
                   value={minVotes}
@@ -484,34 +511,7 @@ const Container = () => {
                     },
                   }}
                 />
-              </div>
-              <div className="proposalGridLow">
-                <TextField
-                  id="standard-basic"
-                  label="Start Time"
-                  type="datetime-local"
-                  defaultValue={today}
-                  className="proposalInput"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onChange={e => {
-                    setStartTime(new Date(e.target.value));
-                  }}
-                />
-                <TextField
-                  id="standard-basic"
-                  label="Min End Time"
-                  type="datetime-local"
-                  defaultValue={today}
-                  className="proposalInput"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onChange={e => {
-                    setMinEndTime(new Date(e.target.value));
-                  }}
-                />
+
                 <TextField
                   id="standard-basic"
                   label="Max End Time"
