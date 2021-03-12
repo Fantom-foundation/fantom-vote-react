@@ -85,7 +85,6 @@
   border-radius: 24px;
   display: flex;
   flex-direction: column;
-  max-width: calc(100%-900px) !important;
   box-shadow: 0 10px 50px rgba(255, 255, 255, 0.5);
   color: white;
   z-index: 101;
@@ -102,7 +101,6 @@
   background-repeat: no-repeat;
   background-size: contain;
   transform: rotateY(180deg);
-  max-width: calc(100%-900px) !important;
 }
 .subboard2 {
   flex: 0 0 40%;
