@@ -111,6 +111,8 @@ const Container = () => {
         chainId = await connectMetamask();
       if (chainId != 4002) {
         console.log('not connected to Opera Network');
+        dispatch(WalletConnectActions.connectWallet(chainId));
+        createNotification('custom', 'You are not connected to Opera Network');
       } else {
         console.log('connected');
         dispatch(WalletConnectActions.connectWallet(chainId));
@@ -213,7 +215,7 @@ const Container = () => {
         NotificationManager.warning('You need to connect to Opera Network first', 'Connect your Metamask', 3000);
         break;
       case 'error':
-        NotificationManager.error('Failed', 'Error', 5000, () => {
+        NotificationManager.error('Failed', type, 5000, () => {
           // alert('callback');
         });
         break;
@@ -223,7 +225,7 @@ const Container = () => {
         });
         break;
       case 'custom':
-        NotificationManager.warning(message, 'Invalid Input', 3000, () => {
+        NotificationManager.warning(message, '', 3000, () => {
           // alert('callback');
         });
         break;
