@@ -27,15 +27,16 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import StarIcon from '@material-ui/icons/Star';
 import Switch from '@material-ui/core/Switch';
-import dateFormat from 'dateformat';
 
 import WalletConnectActions from '../../actions/walletconnect.actions';
 import { ProposalTemplateSC, PlainTextProposalSC } from '../../constants/contract.constants';
 
 import './styles.css';
 import FantomLogo from '../../assets/fantomlogo.svg';
-import { Description } from '@material-ui/icons';
-import { Input } from '@material-ui/core';
+
+import DatePicker from 'react-datepicker';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 const Container = () => {
   const dispatch = useDispatch();
@@ -47,14 +48,15 @@ const Container = () => {
   const [minAgreement, setMinAgreement] = useState();
   const [minVotes, setMinVotes] = useState();
   const [options, setOptions] = useState();
-  const [startTime, setStartTime] = useState();
-  const [minEndTime, setMinEndTime] = useState();
-  const [maxEndTime, setMaxEndTime] = useState();
+  const [startTime, setStartTime] = useState(new Date());
+  const [minEndTime, setMinEndTime] = useState(new Date());
+  const [maxEndTime, setMaxEndTime] = useState(new Date());
 
   const [isTemplateShown, setIsTemplateShown] = useState(false);
   const [isConstraintsShown, setIsConstraintsShown] = useState(false);
-  const now = new Date();
-  const today = dateFormat(now, 'yyyy-mm-dd') + 'T' + dateFormat(now, 'HH:MM');
+  // const now = new Date();
+  // const today = dateFormat(now, 'yyyy-mm-dd') + 'T' + dateFormat(now, 'HH:MM');
+  const today = new Date();
 
   let isConnected = useSelector(state => state.ConnectWallet.isConnected);
   let chainId = useSelector(state => state.ConnectWallet.chainId);
@@ -491,19 +493,20 @@ const Container = () => {
                     }
                   }
                 />
-                <TextField
-                  id="standard-basic"
-                  label="Start Time"
-                  type="datetime-local"
-                  defaultValue={today}
-                  className="proposalInput"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onChange={e => {
-                    setStartTime(new Date(e.target.value));
-                  }}
-                />
+                <div className="datepickerContainer">
+                  <label className="customDatePickerLabel">Start Time</label>
+                  <DatePicker
+                    wrapperClassName="datePickerWrapper"
+                    className="datePicker"
+                    selected={startTime}
+                    onChange={date => {
+                      console.log(date);
+                      setStartTime(new Date(date));
+                    }}
+                    showTimeSelect
+                    dateFormat="MMMM d, yyyy h:mm aa"
+                  />
+                </div>
               </div>
               <div className="proposalGridLow">
                 <TextField
@@ -532,19 +535,20 @@ const Container = () => {
                     },
                   }}
                 />
-                <TextField
-                  id="standard-basic"
-                  label="Min End Time"
-                  type="datetime-local"
-                  defaultValue={today}
-                  className="proposalInput"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onChange={e => {
-                    setMinEndTime(new Date(e.target.value));
-                  }}
-                />
+                <div className="datepickerContainer">
+                  <label className="customDatePickerLabel">Min End Time</label>
+                  <DatePicker
+                    wrapperClassName="datePickerWrapper"
+                    className="datePicker"
+                    selected={minEndTime}
+                    onChange={date => {
+                      console.log(date);
+                      setMinEndTime(new Date(date));
+                    }}
+                    showTimeSelect
+                    dateFormat="MMMM d, yyyy h:mm aa"
+                  />
+                </div>
               </div>
               <div className="proposalGridLow">
                 <TextField
@@ -579,20 +583,20 @@ const Container = () => {
                     },
                   }}
                 />
-
-                <TextField
-                  id="standard-basic"
-                  label="Max End Time"
-                  type="datetime-local"
-                  defaultValue={today}
-                  className="proposalInput"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onChange={e => {
-                    setMaxEndTime(new Date(e.target.value));
-                  }}
-                />
+                <div className="datepickerContainer">
+                  <label className="customDatePickerLabel">Max End Time</label>
+                  <DatePicker
+                    wrapperClassName="datePickerWrapper"
+                    className="datePicker"
+                    selected={maxEndTime}
+                    onChange={date => {
+                      console.log(date);
+                      setMaxEndTime(new Date(date));
+                    }}
+                    showTimeSelect
+                    dateFormat="MMMM d, yyyy h:mm aa"
+                  />
+                </div>
               </div>
               <div className={isTemplateShown ? 'smallButton' : 'bigButton'}>
                 <Button

@@ -246,3 +246,49 @@
   border-radius: 12px;
   margin-right: 20px;
 }
+
+.datepickerContainer {
+  position: relative;
+  border: none !important;
+  border-bottom: 1px solid gray !important;
+  font: inherit !important;
+  color: currentColor !important;
+  width: 30% !important;
+  /* border: 0 !important; */
+  margin: 0 12px !important;
+  display: block !important;
+  min-width: 0 !important;
+  background: none !important;
+  box-sizing: content-box !important;
+  animation-name: mui-auto-fill-cancel !important;
+  letter-spacing: inherit !important;
+  animation-duration: 10ms !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.datepickerContainer label {
+  position: absolute;
+  transform: translate(0, 1.5px) scale(0.75);
+  transform-origin: top left;
+}
+
+.datePickerWrapper {
+  margin-top: 16px;
+  width: 100%;
+}
+
+.datePicker {
+  width: 100%;
+  height: 32px;
+  border: none !important;
+  outline: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  font: inherit !important;
+  color: currentColor !important;
+
+}
+
+.customDatePickerLabel {
+  color : gray;
+}
