@@ -29,7 +29,7 @@ import StarIcon from '@material-ui/icons/Star';
 import Switch from '@material-ui/core/Switch';
 
 import WalletConnectActions from '../../actions/walletconnect.actions';
-import { ProposalTemplateSC, PlainTextProposalSC } from '../../constants/contract.constants';
+import { ProposalTemplateSC, PlainTextProposalSC, ChainIDs } from '../../constants/contract.constants';
 
 import './styles.css';
 import FantomLogo from '../../assets/fantomlogo.svg';
@@ -111,7 +111,7 @@ const Container = () => {
       // handle connect here
       let account,
         chainId = await connectMetamask();
-      if (chainId != 4002) {
+      if (chainId != ChainIDs.mainnet) {
         console.log('not connected to Opera Network');
         dispatch(WalletConnectActions.connectWallet(chainId));
         createNotification('custom', 'You are not connected to Opera Network');
@@ -340,12 +340,12 @@ const Container = () => {
       // handle when not connected
       createNotification('disconnected');
     } else {
-      if (chainId != 4002) {
-        createNotification('custom', 'You need to connect to OperaNetwork first');
+      if (chainId != ChainIDs.mainnet) {
+        createNotification('custom', 'You need to connect to Opera Mainnet first');
         return;
       }
-      let templateSC = await loadContract(ProposalTemplateSC.testnetAddress, ProposalTemplateSC.abi);
-      let plainTextProposalFactorySC = await loadContract(PlainTextProposalSC.testnetAddress, PlainTextProposalSC.abi);
+      let templateSC = await loadContract(ProposalTemplateSC.mainnetAddress, ProposalTemplateSC.abi);
+      let plainTextProposalFactorySC = await loadContract(PlainTextProposalSC.mainnetAddress, PlainTextProposalSC.abi);
       console.log(templateSC);
       console.log(plainTextProposalFactorySC);
       try {

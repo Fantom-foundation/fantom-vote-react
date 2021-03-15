@@ -206,7 +206,7 @@ export const ProposalTemplateSC = {
 };
 
 export const PlainTextProposalSC = {
-  mainnetAddress: '',
+  mainnetAddress: '0xc9f5aa2c93ae9e89a77dc60e7e3cfff1234e4287',
   testnetAddress: '0xb4673f085ae472c2974febfed3a41bb73aeb172e',
   abi: [
     {
@@ -264,4 +264,9 @@ export const PlainTextProposalSC = {
       type: 'function',
     },
   ],
+};
+
+export const ChainIDs = {
+  mainnet: 250,
+  testnet: 4002,
 };
