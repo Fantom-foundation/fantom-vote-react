@@ -181,7 +181,7 @@ const Container = () => {
       'Call-executable only',
       '1 hour',
       '30 days',
-      '7 days',
+      '10 days',
       '180 days',
       '60%',
       '60%',
@@ -194,8 +194,8 @@ const Container = () => {
       '30 days',
       '14 days',
       '180 days',
-      '55%',
-      '55%',
+      '90%',
+      '90%',
     ),
   ];
 
@@ -553,7 +553,7 @@ const Container = () => {
               <div className="proposalGridLow">
                 <TextField
                   id="standard-basic"
-                  label="OptionScales"
+                  label="Options"
                   onChange={e => {
                     let value = e.target.value;
                     let values = value.split(',');
@@ -563,7 +563,7 @@ const Container = () => {
                     });
                     setOptions(_options);
                   }}
-                  placeholder="Each options are separated by comma. eg: 1,2,3"
+                  placeholder="Each option is separated by comma. eg: 1,2,3"
                   className="proposalInput"
                 />
                 <TextField
