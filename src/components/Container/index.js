@@ -48,9 +48,9 @@ const Container = () => {
   const [minAgreement, setMinAgreement] = useState();
   const [minVotes, setMinVotes] = useState();
   const [options, setOptions] = useState();
-  const [startTime, setStartTime] = useState(new Date());
-  const [minEndTime, setMinEndTime] = useState(new Date());
-  const [maxEndTime, setMaxEndTime] = useState(new Date());
+  const [startTime, setStartTime] = useState(1);
+  const [minEndTime, setMinEndTime] = useState(7);
+  const [maxEndTime, setMaxEndTime] = useState(180);
 
   const [isTemplateShown, setIsTemplateShown] = useState(false);
   const [isConstraintsShown, setIsConstraintsShown] = useState(false);
@@ -240,29 +240,42 @@ const Container = () => {
   };
 
   const validateInputs = () => {
-    let now = new Date();
-    let _startTime = new Date(startTime);
-    let _minEndTime = new Date(minEndTime);
-    let _maxEndTime = new Date(maxEndTime);
-    if (now >= _startTime) {
-      createNotification('custom', 'Start Time must be later than now');
-      return false;
-    }
-    if ((_startTime - now) / 1000 < 3600) {
+    // let now = new Date();
+    // let _startTime = new Date(startTime);
+    // let _minEndTime = new Date(minEndTime);
+    // let _maxEndTime = new Date(maxEndTime);
+    // if (now >= _startTime) {
+    //   createNotification('custom', 'Start Time must be later than now');
+    //   return false;
+    // }
+    // if ((_startTime - now) / 1000 < 3600) {
+    //   createNotification('custom', 'There must be at least 1 hour delay');
+    //   return false;
+    // }
+    // if ((_minEndTime - _startTime) / 1000 < 3600 * 24 * 7) {
+    //   createNotification('custom', 'Min Voting Duration is at least 7 days');
+    //   return false;
+    // }
+    // if ((_maxEndTime - _startTime) / 1000 > 3600 * 24 * 180) {
+    //   createNotification('custom', 'Max Voting Duration is at most 180 days');
+    //   return false;
+    // }
+
+    // if (_minEndTime > _maxEndTime) {
+    //   createNotification('custom', 'Max End time should be later than Min End time');
+    //   return false;
+    // }
+
+    if (!startTime || parseFloat(startTime) < 1) {
       createNotification('custom', 'There must be at least 1 hour delay');
       return false;
     }
-    if ((_minEndTime - _startTime) / 1000 < 3600 * 24 * 7) {
+    if (!minEndTime || parseFloat(minEndTime) < 7) {
       createNotification('custom', 'Min Voting Duration is at least 7 days');
       return false;
     }
-    if ((_maxEndTime - _startTime) / 1000 > 3600 * 24 * 180) {
-      createNotification('custom', 'Max Voting Duration is at most 180 days');
-      return false;
-    }
-
-    if (_minEndTime > _maxEndTime) {
-      createNotification('custom', 'Max End time should be later than Min End time');
+    if (!maxEndTime || parseFloat(maxEndTime) < parseFloat(minEndTime) || maxEndTime > 180) {
+      createNotification('custom', 'Max Voting Duration invalid');
       return false;
     }
 
@@ -302,23 +315,23 @@ const Container = () => {
     if (!isValidProposal) {
       return;
     }
-    let now = new Date();
+    // let now = new Date();
 
     let provider = new ethers.providers.Web3Provider(window.ethereum);
     let accounts = await provider.listAccounts();
     let account = accounts[0];
 
-    console.log(
-      proposalName,
-      proposalDescription,
-      options,
-      ((minVotes * 10 ** 18) / 100).toString(),
-      ((minAgreement * 10 ** 18) / 100).toString(),
-      parseInt((startTime - now) / 1000),
-      parseInt((minEndTime - now) / 1000),
-      parseInt((maxEndTime - now) / 1000),
-      { from: account, value: ethers.utils.parseEther('100.0') },
-    );
+    // let result = await plainTextProposalFactorySC.create(
+    //   proposalName,
+    //   proposalDescription,
+    //   options,
+    //   ((minVotes * 10 ** 18) / 100).toString(),
+    //   ((minAgreement * 10 ** 18) / 100).toString(),
+    //   parseInt((startTime - now) / 1000),
+    //   parseInt((minEndTime - now) / 1000),
+    //   parseInt((maxEndTime - now) / 1000),
+    //   { from: account, value: ethers.utils.parseEther('100.0') },
+    // );
 
     let result = await plainTextProposalFactorySC.create(
       proposalName,
@@ -326,9 +339,9 @@ const Container = () => {
       options,
       ((minVotes * 10 ** 18) / 100).toString(),
       ((minAgreement * 10 ** 18) / 100).toString(),
-      parseInt((startTime - now) / 1000),
-      parseInt((minEndTime - now) / 1000),
-      parseInt((maxEndTime - now) / 1000),
+      parseInt(startTime * 3600),
+      parseInt(minEndTime * 24 * 3600),
+      parseInt(maxEndTime * 24 * 3600),
       { from: account, value: ethers.utils.parseEther('100.0') },
     );
     console.log(result);
@@ -493,7 +506,16 @@ const Container = () => {
                     }
                   }
                 />
-                <div className="datepickerContainer">
+                <TextField
+                  id="standard-basic"
+                  label="Start Time(in hours)"
+                  value={startTime}
+                  onChange={e => {
+                    setStartTime(parseFloat(e.target.value));
+                  }}
+                  className="proposalInput"
+                />
+                {/* <div className="datepickerContainer">
                   <label className="customDatePickerLabel">Start Time</label>
                   <DatePicker
                     wrapperClassName="datePickerWrapper"
@@ -506,7 +528,7 @@ const Container = () => {
                     showTimeSelect
                     dateFormat="MMMM d, yyyy h:mm aa"
                   />
-                </div>
+                </div> */}
               </div>
               <div className="proposalGridLow">
                 <TextField
@@ -535,7 +557,16 @@ const Container = () => {
                     },
                   }}
                 />
-                <div className="datepickerContainer">
+                <TextField
+                  id="standard-basic"
+                  label="Min End Time (in days)"
+                  value={minEndTime}
+                  onChange={e => {
+                    setMinEndTime(parseFloat(e.target.value));
+                  }}
+                  className="proposalInput"
+                />
+                {/* <div className="datepickerContainer">
                   <label className="customDatePickerLabel">Min End Time</label>
                   <DatePicker
                     wrapperClassName="datePickerWrapper"
@@ -548,7 +579,7 @@ const Container = () => {
                     showTimeSelect
                     dateFormat="MMMM d, yyyy h:mm aa"
                   />
-                </div>
+                </div> */}
               </div>
               <div className="proposalGridLow">
                 <TextField
@@ -583,7 +614,16 @@ const Container = () => {
                     },
                   }}
                 />
-                <div className="datepickerContainer">
+                <TextField
+                  id="standard-basic"
+                  label="Max End Time (in days)"
+                  value={maxEndTime}
+                  onChange={e => {
+                    setMaxEndTime(parseFloat(e.target.value));
+                  }}
+                  className="proposalInput"
+                />
+                {/* <div className="datepickerContainer">
                   <label className="customDatePickerLabel">Max End Time</label>
                   <DatePicker
                     wrapperClassName="datePickerWrapper"
@@ -596,7 +636,7 @@ const Container = () => {
                     showTimeSelect
                     dateFormat="MMMM d, yyyy h:mm aa"
                   />
-                </div>
+                </div> */}
               </div>
               <div className={isTemplateShown ? 'smallButton' : 'bigButton'}>
                 <Button
