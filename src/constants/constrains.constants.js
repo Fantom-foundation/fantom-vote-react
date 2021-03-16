@@ -17,13 +17,13 @@ export const ProposalConstraints = {
     minTurnout: 60,
     minAgreement: 60,
   },
-  '2': {
+  '3': {
     type: 1,
     minStartTime: 60 * 60,
     maxStartTime: 60 * 60 * 24 * 30,
     minVotingDuration: 60 * 60 * 24 * 14,
     maxVotingDuration: 60 * 60 * 24 * 180,
-    minTurnout: 55,
-    minAgreement: 55,
+    minTurnout: 90,
+    minAgreement: 90,
   },
 };
