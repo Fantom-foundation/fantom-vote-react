@@ -500,11 +500,7 @@ const Container = () => {
                   label="Address"
                   value={formatAddress(account)}
                   className="proposalInput"
-                  inputProps={
-                    {
-                      // readOnly: true,
-                    }
-                  }
+                  inputProps={{}}
                 />
                 <TextField
                   id="standard-basic"
@@ -515,20 +511,6 @@ const Container = () => {
                   }}
                   className="proposalInput"
                 />
-                {/* <div className="datepickerContainer">
-                  <label className="customDatePickerLabel">Start Time</label>
-                  <DatePicker
-                    wrapperClassName="datePickerWrapper"
-                    className="datePicker"
-                    selected={startTime}
-                    onChange={date => {
-                      console.log(date);
-                      setStartTime(new Date(date));
-                    }}
-                    showTimeSelect
-                    dateFormat="MMMM d, yyyy h:mm aa"
-                  />
-                </div> */}
               </div>
               <div className="proposalGridLow">
                 <TextField
@@ -566,20 +548,6 @@ const Container = () => {
                   }}
                   className="proposalInput"
                 />
-                {/* <div className="datepickerContainer">
-                  <label className="customDatePickerLabel">Min End Time</label>
-                  <DatePicker
-                    wrapperClassName="datePickerWrapper"
-                    className="datePicker"
-                    selected={minEndTime}
-                    onChange={date => {
-                      console.log(date);
-                      setMinEndTime(new Date(date));
-                    }}
-                    showTimeSelect
-                    dateFormat="MMMM d, yyyy h:mm aa"
-                  />
-                </div> */}
               </div>
               <div className="proposalGridLow">
                 <TextField
@@ -590,7 +558,9 @@ const Container = () => {
                     let values = value.split(',');
                     let _options = [];
                     values.map(val => {
-                      _options.push(ethers.utils.formatBytes32String(val));
+                      let _val = val.trim();
+                      if (_val.length > 31) _val = _val.slice(0, 31);
+                      _options.push(ethers.utils.formatBytes32String(_val));
                     });
                     setOptions(_options);
                   }}
@@ -623,20 +593,6 @@ const Container = () => {
                   }}
                   className="proposalInput"
                 />
-                {/* <div className="datepickerContainer">
-                  <label className="customDatePickerLabel">Max End Time</label>
-                  <DatePicker
-                    wrapperClassName="datePickerWrapper"
-                    className="datePicker"
-                    selected={maxEndTime}
-                    onChange={date => {
-                      console.log(date);
-                      setMaxEndTime(new Date(date));
-                    }}
-                    showTimeSelect
-                    dateFormat="MMMM d, yyyy h:mm aa"
-                  />
-                </div> */}
               </div>
               <div className={isTemplateShown ? 'smallButton' : 'bigButton'}>
                 <Button
