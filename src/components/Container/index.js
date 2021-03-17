@@ -526,6 +526,7 @@ const Container = () => {
                   label="Options"
                   value={rawOptions}
                   onChange={e => {
+                    setIsOptionOverflowed(false);
                     let value = e.target.value;
                     setRawOptions(value);
                     let values = value.split(',');
