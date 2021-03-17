@@ -47,16 +47,28 @@ const Container = () => {
   const [proposalDescription, setProposalDescription] = useState('');
   const [minAgreement, setMinAgreement] = useState();
   const [minVotes, setMinVotes] = useState();
+  const [rawOptions, setRawOptions] = useState('');
   const [options, setOptions] = useState();
   const [startTime, setStartTime] = useState(1);
   const [minEndTime, setMinEndTime] = useState(7);
   const [maxEndTime, setMaxEndTime] = useState(180);
 
+  const [isOptionOverflowed, setIsOptionOverflowed] = useState(false);
+
   const [isTemplateShown, setIsTemplateShown] = useState(false);
   const [isConstraintsShown, setIsConstraintsShown] = useState(false);
-  // const now = new Date();
-  // const today = dateFormat(now, 'yyyy-mm-dd') + 'T' + dateFormat(now, 'HH:MM');
-  const today = new Date();
+
+  const resetStates = () => {
+    setWhichProposal('plaintext');
+    setProposalName('');
+    setProposalDescription('');
+    setOptions('');
+    setStartTime(1);
+    setMinEndTime(7);
+    setMaxEndTime(180);
+    setIsOptionOverflowed(false);
+    setRawOptions('');
+  };
 
   let isConnected = useSelector(state => state.ConnectWallet.isConnected);
   let chainId = useSelector(state => state.ConnectWallet.chainId);
@@ -217,19 +229,13 @@ const Container = () => {
         NotificationManager.warning('You need to connect to Opera Network first', 'Connect your Metamask', 3000);
         break;
       case 'error':
-        NotificationManager.error('Failed', type, 5000, () => {
-          // alert('callback');
-        });
+        NotificationManager.error('Failed', type, 5000, () => {});
         break;
       case 'invalidInput':
-        NotificationManager.warning(message + ' is invalid', 'Invalid Input', 3000, () => {
-          // alert('callback');
-        });
+        NotificationManager.warning(message + ' is invalid', 'Invalid Input', 3000, () => {});
         break;
       case 'custom':
-        NotificationManager.warning(message, '', 3000, () => {
-          // alert('callback');
-        });
+        NotificationManager.warning(message, '', 3000, () => {});
         break;
     }
   };
@@ -240,32 +246,6 @@ const Container = () => {
   };
 
   const validateInputs = () => {
-    // let now = new Date();
-    // let _startTime = new Date(startTime);
-    // let _minEndTime = new Date(minEndTime);
-    // let _maxEndTime = new Date(maxEndTime);
-    // if (now >= _startTime) {
-    //   createNotification('custom', 'Start Time must be later than now');
-    //   return false;
-    // }
-    // if ((_startTime - now) / 1000 < 3600) {
-    //   createNotification('custom', 'There must be at least 1 hour delay');
-    //   return false;
-    // }
-    // if ((_minEndTime - _startTime) / 1000 < 3600 * 24 * 7) {
-    //   createNotification('custom', 'Min Voting Duration is at least 7 days');
-    //   return false;
-    // }
-    // if ((_maxEndTime - _startTime) / 1000 > 3600 * 24 * 180) {
-    //   createNotification('custom', 'Max Voting Duration is at most 180 days');
-    //   return false;
-    // }
-
-    // if (_minEndTime > _maxEndTime) {
-    //   createNotification('custom', 'Max End time should be later than Min End time');
-    //   return false;
-    // }
-
     if (!startTime || parseFloat(startTime) < 1) {
       createNotification('custom', 'There must be at least 1 hour delay');
       return false;
@@ -321,18 +301,6 @@ const Container = () => {
     let accounts = await provider.listAccounts();
     let account = accounts[0];
 
-    // let result = await plainTextProposalFactorySC.create(
-    //   proposalName,
-    //   proposalDescription,
-    //   options,
-    //   ((minVotes * 10 ** 18) / 100).toString(),
-    //   ((minAgreement * 10 ** 18) / 100).toString(),
-    //   parseInt((startTime - now) / 1000),
-    //   parseInt((minEndTime - now) / 1000),
-    //   parseInt((maxEndTime - now) / 1000),
-    //   { from: account, value: ethers.utils.parseEther('100.0') },
-    // );
-
     let result = await plainTextProposalFactorySC.create(
       proposalName,
       proposalDescription,
@@ -363,7 +331,10 @@ const Container = () => {
       console.log(plainTextProposalFactorySC);
       try {
         let result = await handlePlainTextProposal(templateSC, plainTextProposalFactorySC);
-        if (result) createNotification('proposalCreated');
+        if (result) {
+          createNotification('proposalCreated');
+          resetStates();
+        }
       } catch (error) {
         createNotification('custom', 'There has been an error in creating a proposal');
       }
@@ -553,16 +524,24 @@ const Container = () => {
                 <TextField
                   id="standard-basic"
                   label="Options"
+                  value={rawOptions}
                   onChange={e => {
                     let value = e.target.value;
+                    setRawOptions(value);
                     let values = value.split(',');
                     let _options = [];
                     values.map(val => {
                       let _val = val.trim();
-                      if (_val.length > 31) _val = _val.slice(0, 31);
+                      if (_val.length > 31) {
+                        setIsOptionOverflowed(true);
+                        _val = _val.slice(0, 31);
+                      }
                       _options.push(ethers.utils.formatBytes32String(_val));
                     });
                     setOptions(_options);
+                  }}
+                  onBlur={() => {
+                    if (isOptionOverflowed) createNotification('custom', 'Each option must be less than 31 characters');
                   }}
                   placeholder="Each option is separated by comma. eg: 1,2,3"
                   className="proposalInput"
